@@ -4,7 +4,7 @@ import './bootstrap';
 import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createApp, h } from 'vue';
-import { ZiggyVue } from '../../vendor/tightenco/ziggy';
+import { ZiggyVue } from 'ziggy-js';
 import { formatCurrency, formatDate, formatNumber, formatRelativeTime } from './utils/formatters';
 
 const appName = import.meta.env.VITE_APP_NAME || 'سوق الإعلانات';
@@ -22,7 +22,16 @@ createInertiaApp({
 
         const vueApp = createApp({ render: () => h(App, props) });
         vueApp.use(plugin);
-        vueApp.use(ZiggyVue);
+
+        const ziggy = props.initialPage?.props?.ziggy;
+        if (ziggy) {
+            vueApp.use(ZiggyVue, {
+                ...ziggy,
+                location: new URL(ziggy.location),
+            });
+        } else {
+            vueApp.use(ZiggyVue);
+        }
 
         vueApp.config.globalProperties.$formatCurrency = formatCurrency;
         vueApp.config.globalProperties.$formatNumber = formatNumber;
