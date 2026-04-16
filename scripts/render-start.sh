@@ -9,5 +9,6 @@ tail -n +1 -F storage/logs/laravel.log &
 
 php artisan storage:link || true
 php artisan migrate --force
+php artisan db:seed --class=Database\\Seeders\\DemoAdsSeeder --force
 
 php artisan serve --host=0.0.0.0 --port="${PORT:-10000}"
